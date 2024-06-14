@@ -68,7 +68,7 @@ class SandwichMachine:
             return False
 
     def make_sandwich(self, sandwich_size, order_ingredients):
-        """Deduct the required ingredients from the resources.
-           Hint: no output"""
+        for item in order_ingredients:
+            self.machine_resources[item] -= order_ingredients[item]
 
 ### Make an instance of SandwichMachine class and write the rest of the codes ###
