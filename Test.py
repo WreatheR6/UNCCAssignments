@@ -1,41 +1,3 @@
-### Data ###
-
-recipes = {
-    "small": {
-        "ingredients": {
-            "bread": 2,  ## slice
-            "ham": 4,  ## slice
-            "cheese": 4,  ## ounces
-        },
-        "cost": 1.75,
-    },
-    "medium": {
-        "ingredients": {
-            "bread": 4,  ## slice
-            "ham": 6,  ## slice
-            "cheese": 8,  ## ounces
-        },
-        "cost": 3.25,
-    },
-    "large": {
-        "ingredients": {
-            "bread": 6,  ## slice
-            "ham": 8,  ## slice
-            "cheese": 12,  ## ounces
-        },
-        "cost": 5.5,
-    }
-}
-
-resources = {
-    "bread": 12,  ## slice
-    "ham": 18,  ## slice
-    "cheese": 24,  ## ounces
-}
-
-
-### Complete functions ###
-
 class SandwichMachine:
 
     def __init__(self, machine_resources):
@@ -51,7 +13,7 @@ class SandwichMachine:
     def process_coins(self):
         print("Please insert coins.")
         total = 0
-        total += int(input("How many large dollars?: ")) * 1.00
+        total += int(input("How many dollars?: ")) * 1.00
         total += int(input("How many half dollars?: ")) * 0.50
         total += int(input("How many quarters?: ")) * 0.25
         total += int(input("How many nickels?: ")) * 0.05
@@ -71,4 +33,61 @@ class SandwichMachine:
         for item in order_ingredients:
             self.machine_resources[item] -= order_ingredients[item]
 
-### Make an instance of SandwichMachine class and write the rest of the codes ###
+def main():
+    machine_resources = {
+        "bread": 12,
+        "ham": 18,
+        "cheese": 24
+    }
+
+    recipes = {
+        "small": {
+            "ingredients": {
+                "bread": 2,
+                "ham": 4,
+                "cheese": 4
+            },
+            "cost": 1.75,
+        },
+        "medium": {
+            "ingredients": {
+                "bread": 4,
+                "ham": 6,
+                "cheese": 8
+            },
+            "cost": 3.25,
+        },
+        "large": {
+            "ingredients": {
+                "bread": 6,
+                "ham": 8,
+                "cheese": 12
+            },
+            "cost": 5.5,
+        }
+    }
+
+    machine = SandwichMachine(machine_resources)
+
+    while True:
+        choice = input("What would you like? (small/medium/large/off): ").strip().lower()
+
+        if choice in ["small", "medium", "large"]:
+            sandwich_recipe = recipes[choice]
+
+            if machine.check_resources(sandwich_recipe['ingredients']):
+                print(f"The cost of the {choice} sandwich is ${sandwich_recipe['cost']}.")
+                payment = machine.process_coins()
+
+                if machine.transaction_result(payment, sandwich_recipe['cost']):
+                    machine.make_sandwich(choice, sandwich_recipe['ingredients'])
+
+        elif choice == "off":
+            print("Turning off the machine. Goodbye!")
+            break
+
+        else:
+            print("Invalid selection. Please choose again.")
+
+if __name__ == "__main__":
+    main()
